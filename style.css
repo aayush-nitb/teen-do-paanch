@@ -1,0 +1,45 @@
+body {
+	margin: 0;
+	padding: 0;
+	background: rgb(120,240,134);
+}
+input[type="text"] {
+	width: 110px;
+	height: 22px;
+}
+input[type="submit"] {
+	height: 40px;
+	cursor: pointer;
+}
+
+.menu > * {
+	margin: 10px 0;
+	width: 100%;
+}
+.menu > .first {
+	margin-top: 0;
+}
+.menu > .last {
+	margin-bottom: 0;
+}
+.input {
+	height: 22px;
+}
+.input span {
+	float: left;
+	line-height: 22px;
+}
+.input input {
+	float: right;
+}
+.input span {
+	margin-right: 10px;
+}
+
+#menu_main {
+	width: 200px;
+	height: 144px;
+	margin: 140px auto;
+	background: rgb(234,145,56);
+	padding: 20px;
+}
