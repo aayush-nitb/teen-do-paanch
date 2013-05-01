@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 01, 2013 at 02:11 PM
+-- Generation Time: May 01, 2013 at 06:49 PM
 -- Server version: 5.5.24-log
 -- PHP Version: 5.4.3
 
@@ -29,7 +29,8 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `user` (
   `name` text NOT NULL,
   `gameCode` varchar(8) NOT NULL,
-  `role` set('player','spectator','candidate') NOT NULL
+  `role` set('player','spectator','candidate') NOT NULL,
+  `last_login` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

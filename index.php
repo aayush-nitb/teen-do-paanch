@@ -4,7 +4,7 @@
 	</head>
 	<body>
 		<div id="screen_main">
-			<form id="menu_main" class="menu" action="action_menu_main" method="post">
+			<form id="menu_main" class="menu" action="action_menu_main.php" method="post">
 				<div class="first input">
 					<span>Your Name</span>
 					<input type="text" name="str_your_name" />
