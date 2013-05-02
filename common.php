@@ -6,7 +6,7 @@
 		$r = mysql_query($q,$cn);
 		if(!$r) die("INVALID QUERY");
 		$i=0; while($d=mysql_fetch_array($r)) $data[$i++] = $d;
-        	mysql_close($cn);
+		mysql_close($cn);
 		if(isset($data)) return $data;
 	}
 	function dbset($q)
