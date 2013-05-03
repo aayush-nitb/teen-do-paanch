@@ -3,9 +3,9 @@
 	$gameCode = $_COOKIE['game_code'];
 	$server = dbget("SELECT `ownerExpiry` FROM `server`");
 	$ownerExpiry = $server[0][0];
-	$owner = dbget("SELECT `owner_lastmove` FROM `game` WHERE `gameCode`=$gameCode");
+	$owner = dbget("SELECT `owner_lastmove` FROM `game` WHERE `gameCode`='$gameCode'");
 	$ownerLastmove = $owner[0][0];
-	$time_left = 6 + $ownerExpiry - $ownerLastmove;
+	$time_left = 360 + $ownerExpiry - $ownerLastmove;
 ?>
 <html>
 	<head>

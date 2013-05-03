@@ -4,6 +4,7 @@
 		$current_time = time();
 		$expire_time = $current_time + 86400*365;
 		$str_your_name = $_POST["str_your_name"];
+		
 		$game_code = newGameCode();
 		
 		dbset("INSERT INTO `user`(`name`, `gameCode`, `role`) VALUES('$str_your_name', '$game_code', 'player')");
