@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 02, 2013 at 01:07 PM
+-- Generation Time: May 15, 2013 at 07:47 PM
 -- Server version: 5.5.24-log
 -- PHP Version: 5.4.3
 
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `server` (
 --
 
 INSERT INTO `server` (`ownerExpiry`, `product_name`) VALUES
-(1367499804, 'teen-do-paanch');
+(1368647184, 'teen-do-paanch');
 
 -- --------------------------------------------------------
 
@@ -63,7 +63,7 @@ INSERT INTO `server` (`ownerExpiry`, `product_name`) VALUES
 CREATE TABLE IF NOT EXISTS `user` (
   `name` text NOT NULL,
   `gameCode` varchar(8) NOT NULL,
-  `role` set('player','spectator','candidate') NOT NULL
+  `role` set('player','spectator') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 DELIMITER $$
@@ -72,7 +72,7 @@ DELIMITER $$
 --
 CREATE DEFINER=`root`@`localhost` EVENT `ownerExpiry` ON SCHEDULE EVERY 1 MINUTE STARTS '2013-05-02 15:55:24' ON COMPLETION PRESERVE ENABLE DO BEGIN
 UPDATE `server` SET `ownerExpiry`=UNIX_TIMESTAMP();
-UPDATE `game` SET `player1`=`player2`, `player2`=`player3`, `player3`='' WHERE `owner_lastmove` < UNIX_TIMESTAMP()-300;
+UPDATE `game` SET `player1`=`player2`, `player2`=`player3`, `player3`='' WHERE `owner_lastmove` < UNIX_TIMESTAMP()-3600;
 DELETE FROM `user` WHERE `gameCode`=(SELECT `gameCode` FROM `game` WHERE `player1`='');
 DELETE FROM `game` WHERE `player1`='';
 END$$

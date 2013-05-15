@@ -5,11 +5,23 @@
 	$res_server = dbget("SELECT `ownerExpiry` FROM `server`");
 	$ownerExpiry = $res_server[0][0];
 	$res_game = dbget("SELECT `owner_lastmove` FROM `game` WHERE `gameCode`='$gameCode'");
-	$ownerLastmove = $res_game[0][0] + 300;
+	$ownerLastmove = $res_game[0][0] + 3600;
 	while($ownerExpiry < $ownerLastmove){
 		$ownerExpiry += 60;
 	}
 	$time_left = $ownerExpiry - $current_time;
+	
+	$LIST_OF_PLAYERS = "";
+	$res_user = dbget("SELECT `name` FROM `user` WHERE `gameCode`='$gameCode' and `role`='player'");
+	foreach($res_user as $user){
+		$LIST_OF_PLAYERS .= "<div>".$user['name']."</div>\n";
+	}
+	
+	$LIST_OF_SPECTATORS = "";
+	$res_user = dbget("SELECT `name` FROM `user` WHERE `gameCode`='$gameCode' and `role`='spectator'");
+	foreach($res_user as $user){
+		$LIST_OF_SPECTATORS .= "<div>".$user['name']."</div>\n";
+	}
 ?>
 <!--Force IE6 into quirks mode with this comment tag-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -40,11 +52,13 @@
 		</div>
 		<div id="panel-people">
 			<div class="padding">
-				<div id="sub-panel-players">
-					
+				<div class="sub-panel-people">
+					<div class="heading">Players</div>
+					<?php echo $LIST_OF_PLAYERS; ?>
 				</div>
-				<div id="sub-panel-spectators">
-					
+				<div class="sub-panel-people">
+					<div class="heading">Spectators</div>
+					<?php echo $LIST_OF_SPECTATORS; ?>
 				</div>
 			</div>
 		</div>
