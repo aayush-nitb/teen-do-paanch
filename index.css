@@ -1,0 +1,44 @@
+form {
+	margin-bottom: 50px;
+	width: 286px;
+	background: #fcd;
+	border-left: 1px solid #d44;
+	border-right: 1px solid #d44;
+}
+form .heading {
+	font-size: 24px;
+	font-weight: bold;
+	text-align: center;
+	background: #ffd;
+	width: 286px;
+	border-top: 1px solid #d44;
+	border-bottom: 1px solid #d44;
+	padding: 2px 0;
+}
+form .input {
+	margin: 10px;
+	display: table;
+}
+form .input span {
+	font-size: 20px;
+	width: 120px;
+	display: table-cell;
+}
+form .input input {
+	font-size: 16px;
+	display: table-cell;
+	width: 140px;
+}
+form .action {
+	text-align: right;
+	background: #ffd;
+	width: 286px;
+	border-top: 1px solid #d44;
+	border-bottom: 1px solid #d44;
+}
+form .action input {
+	font-size: 16px;
+	width: 145px;
+	height: 30px;
+	margin: 5px 10px;
+}
