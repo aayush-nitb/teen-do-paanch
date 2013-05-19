@@ -1,4 +1,4 @@
-body {
+body{
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -14,11 +14,123 @@ body {
 	width: 100%;
 }
 
+.center{
+	text-align: center;
+}
 .padding{
 	margin: 15px;
 }
+.sub-panel-people{
+	font-size: 18px;
+	margin-bottom: 30px;
+	border-bottom: 2px groove white;
+	padding: 10px;
+}
+.sub-panel-people div{
+	margin-bottom: 10px;
+}
+.sub-panel-people .heading{
+	font-size: 22px;
+	font-weight: bold;
+}
+.card{
+	top: 0px;
+	left: 0px;
+	position: absolute;
+	background: #ffe;
+}
+.club1{
+	background: url(cards.png) 0px 0px no-repeat;
+}
+.club8{
+	background: url(cards.png) -840px 0px no-repeat;
+}
+.club9{
+	background: url(cards.png) -960px 0px no-repeat;
+}
+.club10{
+	background: url(cards.png) -1080px 0px no-repeat;
+}
+.club11{
+	background: url(cards.png) -1200px 0px no-repeat;
+}
+.club12{
+	background: url(cards.png) -1320px 0px no-repeat;
+}
+.club13{
+	background: url(cards.png) -1440px 0px no-repeat;
+}
+.spade1{
+	background: url(cards.png) 0px -160px no-repeat;
+}
+.spade7{
+	background: url(cards.png) -720px -160px no-repeat;
+}
+.spade8{
+	background: url(cards.png) -840px -160px no-repeat;
+}
+.spade9{
+	background: url(cards.png) -960px -160px no-repeat;
+}
+.spade10{
+	background: url(cards.png) -1080px -160px no-repeat;
+}
+.spade11{
+	background: url(cards.png) -1200px -160px no-repeat;
+}
+.spade12{
+	background: url(cards.png) -1320px -160px no-repeat;
+}
+.spade13{
+	background: url(cards.png) -1440px -160px no-repeat;
+}
+.heart1{
+	background: url(cards.png) 0px -320px no-repeat;
+}
+.heart7{
+	background: url(cards.png) -720px -320px no-repeat;
+}
+.heart8{
+	background: url(cards.png) -840px -320px no-repeat;
+}
+.heart9{
+	background: url(cards.png) -960px -320px no-repeat;
+}
+.heart10{
+	background: url(cards.png) -1080px -320px no-repeat;
+}
+.heart11{
+	background: url(cards.png) -1200px -320px no-repeat;
+}
+.heart12{
+	background: url(cards.png) -1320px -320px no-repeat;
+}
+.heart13{
+	background: url(cards.png) -1440px -320px no-repeat;
+}
+.diamond1{
+	background: url(cards.png) 0px -480px no-repeat;
+}
+.diamond8{
+	background: url(cards.png) -840px -480px no-repeat;
+}
+.diamond9{
+	background: url(cards.png) -960px -480px no-repeat;
+}
+.diamond10{
+	background: url(cards.png) -1080px -480px no-repeat;
+}
+.diamond11{
+	background: url(cards.png) -1200px -480px no-repeat;
+}
+.diamond12{
+	background: url(cards.png) -1320px -480px no-repeat;
+}
+.diamond13{
+	background: url(cards.png) -1440px -480px no-repeat;
+}
 
-#panel-information, #panel-people {
+#panel-information, #panel-people{
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -27,7 +139,7 @@ body {
 	overflow: hidden;
 	background: rgb(240,240,240);
 }
-#panel-arena {
+#panel-arena{
 	position: fixed;
 	top: 0;
 	left: 300px;
@@ -36,20 +148,166 @@ body {
 	overflow: auto;
 	background: rgb(120,240,134);
 }
-#panel-people {
+#panel-people{
 	left: auto;
 	right: 0;
 }
-.sub-panel-people {
-	font-size: 18px;
-	margin-bottom: 30px;
-	border-bottom: 2px groove white;
-	padding: 10px;
-}
-.sub-panel-people div {
+#container-row1{
+	margin: 0px auto;
+	width: 800px;
 	margin-bottom: 10px;
 }
-.sub-panel-people .heading {
-	font-size: 22px;
-	font-weight: bold;
+#container-row2{
+	margin: 0px auto;
+	width: 800px;
+}
+#container-trick{
+	float: left;
+	width: 480px;
+	height: 450px;
+}
+#area-my{
+	position: relative;
+	width: 450px;
+	height: 160px;
+	margin: 0 auto;
+}
+#area-left, #area-right{
+	position: relative;
+	float: left;
+	width: 160px;
+	height: 450px;
+}
+#area-trick{
+	margin: 225px 240px;
+	position: relative;
+}
+#area-my .card, #area-trick .card{
+	width: 120px;
+	height: 160px;
+}
+#area-left .card, #area-right .card{
+	height: 120px;
+	width: 160px;
+	background: url(back-image/style1_landscape.jpg) no-repeat;
+}
+#area-my #card1{
+	left: 37px;
+	top: 1px;
+}
+#area-my #card2{
+	left: 74px;
+	top: 2px;
+}
+#area-my #card3{
+	left: 111px;
+	top: 3px;
+}
+#area-my #card4{
+	left: 148px;
+	top: 4px;
+}
+#area-my #card5{
+	left: 185px;
+	top: 5px;
+}
+#area-my #card6{
+	left: 222px;
+	top: 6px;
+}
+#area-my #card7{
+	left: 259px;
+	top: 7px;
+}
+#area-my #card8{
+	left: 296px;
+	top: 8px;
+}
+#area-my #card9{
+	left: 333px;
+	top: 9px;
+}
+#area-left #card1{
+	top: 37px;
+	left: 1px;
+}
+#area-left #card2{
+	top: 74px;
+	left: 2px;
+}
+#area-left #card3{
+	top: 111px;
+	left: 3px;
+}
+#area-left #card4{
+	top: 148px;
+	left: 4px;
+}
+#area-left #card5{
+	top: 185px;
+	left: 5px;
+}
+#area-left #card6{
+	top: 222px;
+	left: 6px;
+}
+#area-left #card7{
+	top: 259px;
+	left: 7px;
+}
+#area-left #card8{
+	top: 296px;
+	left: 8px;
+}
+#area-left #card9{
+	top: 333px;
+	left: 9px;
+}
+#area-right #card1{
+	top: 37px;
+	left: -1px;
+}
+#area-right #card2{
+	top: 74px;
+	left: -2px;
+}
+#area-right #card3{
+	top: 111px;
+	left: -3px;
+}
+#area-right #card4{
+	top: 148px;
+	left: -4px;
+}
+#area-right #card5{
+	top: 185px;
+	left: -5px;
+}
+#area-right #card6{
+	top: 222px;
+	left: -6px;
+}
+#area-right #card7{
+	top: 259px;
+	left: -7px;
+}
+#area-right #card8{
+	top: 296px;
+	left: -8px;
+}
+#area-right #card9{
+	top: 333px;
+	left: -9px;
+}
+#area-trick #card1{
+	top: -140px;
+	left: -60px;
+}
+#area-trick #card2{
+	top: -80px;
+	left: -100px;
+}
+#area-trick #card3{
+	top: -100px;
+	left: -20px;
 }
