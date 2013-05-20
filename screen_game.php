@@ -14,14 +14,18 @@
 	
 	$LIST_OF_PLAYERS = "";
 	$res_user = dbget("SELECT `name` FROM `user` WHERE `gameCode`='$gameCode' and `role`='player'");
-	foreach($res_user as $user){
-		$LIST_OF_PLAYERS .= "<div>".$user['name']."</div>\n";
+	if($res_user){
+		foreach($res_user as $user){
+			$LIST_OF_PLAYERS .= "<div>".$user['name']."</div>\n";
+		}
 	}
 	
 	$LIST_OF_SPECTATORS = "";
 	$res_user = dbget("SELECT `name` FROM `user` WHERE `gameCode`='$gameCode' and `role`='spectator'");
-	foreach($res_user as $user){
-		$LIST_OF_SPECTATORS .= "<div>".$user['name']."</div>\n";
+	if($res_user){
+		foreach($res_user as $user){
+			$LIST_OF_SPECTATORS .= "<div>".$user['name']."</div>\n";
+		}
 	}
 	
 	if($res_game[0]['player1'] === $my_name){
