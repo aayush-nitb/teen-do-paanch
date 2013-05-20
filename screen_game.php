@@ -70,23 +70,26 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 		<title>Teen-do-paanch</title>
 		<link href="screen_game.css" type="text/css" rel="stylesheet" />
+		<script src="jquery-1.9.1.js"></script>
+		<script src="jquery-ui-1.10.3.js"></script>
 		<script>
 			var time_left = <?php echo $time_left; ?>;
 			function setTime(){
 				document.getElementById('expiry').innerHTML = time_left--;
 			}
 			setInterval(setTime, 1000);
-			function move(event){
-				event.dataTransfer.setData("Text", event.target.className);
-			}
-			function noDefault(event){
-				event.preventDefault();
-			}
-			function drop(event){
-				event.preventDefault();
-				var card = event.dataTransfer.getData("Text");
-				document.getElementById("area-trick").innerHTML += "<div class='" + card + "' id='card1'></div>";
-			}
+			$(function(){
+				$("#area-my .card").draggable({
+					revert: "invalid"
+				});
+				$("#container-trick").droppable({
+					drop: function(event, ui){
+						var card = $(ui.draggable).attr('class');
+						$(ui.draggable).remove();
+						$("#area-trick").append("<div class='"+ card +"' id='card1'></div>");
+					}
+				});
+			});
 		</script>
 	</head>
 	<body>
@@ -103,7 +106,7 @@
 						<?php
 							if($my_card){
 								foreach($my_card as $key=>$value){
-									echo "<div draggable='true' ondragstart='move(event)' class='card $value' id='card$key'></div>\n";
+									echo "<div class='card $value' id='card$key'></div>\n";
 								}
 							}
 						?>
@@ -117,7 +120,7 @@
 							}
 						?>
 					</div>
-					<div id="container-trick" ondragover="noDefault(event)" ondrop="drop(event)">
+					<div id="container-trick">
 						<div id="area-trick"></div>
 					</div>
 					<div id="area-right">
