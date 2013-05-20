@@ -88,16 +88,18 @@
 			}
 			setInterval(setTime, 1000);
 			$(function(){
-				$("#area-my .card").draggable({
-					revert: "invalid"
-				});
-				$("#container-trick").droppable({
-					drop: function(event, ui){
-						var card = $(ui.draggable).attr('class');
-						$(ui.draggable).remove();
-						$("#area-trick").append("<div class='"+ card +"' id='card1'></div>");
-					}
-				});
+				<?php if($my_player !== 'spectator'){ ?>
+					$("#area-my .card").draggable({
+						revert: "invalid"
+					});
+					$("#container-trick").droppable({
+						drop: function(event, ui){
+							var card = $(ui.draggable).attr('class');
+							$(ui.draggable).remove();
+							$("#area-trick").append("<div class='"+ card +"' id='card1'></div>");
+						}
+					});
+				<?php } ?>
 			});
 		</script>
 	</head>
