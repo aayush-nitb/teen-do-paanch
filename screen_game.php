@@ -28,6 +28,7 @@
 		}
 	}
 	
+	$top_player = '';
 	if($res_game[0]['player1'] === $my_name){
 		$my_player = 'player1';
 		$left_player = 'player2';
@@ -43,9 +44,16 @@
 		$left_player = 'player1';
 		$right_player = 'player2';
 	}
+	else{
+		$my_player = 'spectator';
+		$top_player = 'player1';
+		$left_player = 'player3';
+		$right_player = 'player2';
+	}
 	
 	$left_count = 0;
 	$right_count = 0;
+	$top_count = 0;
 	$my_card = array();
 	$cards = array();
 	$deck = array("spade","heart","club","diamond");
@@ -59,6 +67,7 @@
 	}
 	foreach($cards as $card){
 		if($res_game[0][$card] === $my_player) $my_card[] = $card;
+		if($res_game[0][$card] === $top_player) $top_count++;
 		if($res_game[0][$card] === $left_player) $left_count++;
 		if($res_game[0][$card] === $right_player) $right_count++;
 	}
@@ -104,9 +113,15 @@
 				<div id="container-row1">
 					<div id="area-my">
 						<?php
-							if($my_card){
-								foreach($my_card as $key=>$value){
-									echo "<div class='card $value' id='card$key'></div>\n";
+							if($my_player === 'spectator'){
+								for($i=0; $i<$top_count; $i++){
+									echo "<div class='hidden card' id='card$i'></div>\n";
+								}
+							}else{
+								if($my_card){
+									foreach($my_card as $key=>$value){
+										echo "<div class='card $value' id='card$key'></div>\n";
+									}
 								}
 							}
 						?>

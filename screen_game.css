@@ -191,6 +191,9 @@ body{
 	width: 160px;
 	background: url(back-image/style1_landscape.jpg) no-repeat;
 }
+#area-my .hidden{
+	background: url(back-image/style1.jpg) no-repeat;
+}
 #area-my #card1{
 	left: 37px;
 	top: 1px;
