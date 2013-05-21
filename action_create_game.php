@@ -33,7 +33,7 @@
 		$player_list = implode(",", $players);
 		
 		dbset("INSERT INTO `user`(`name`, `gameCode`, `role`) VALUES('$str_your_name', '$game_code', 'player')");
-		dbset("INSERT INTO `game`(`gameCode`, `turn`, `player1`, `owner_lastmove`, $card_list) VALUES('$game_code', '$str_your_name', '$str_your_name', $current_time, $player_list)");
+		dbset("INSERT INTO `game`(`gameCode`, `turn`, `player1`, `owner_lastmove`, $card_list) VALUES('$game_code', 'player1', '$str_your_name', $current_time, $player_list)");
 		
 		setcookie("str_your_name", $str_your_name, $cookie_expire_time);
 		setcookie("game_code", $game_code, $cookie_expire_time);

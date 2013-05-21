@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 19, 2013 at 10:58 PM
+-- Generation Time: May 21, 2013 at 10:22 AM
 -- Server version: 5.5.24-log
 -- PHP Version: 5.4.3
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `game`;
 CREATE TABLE `game` (
   `gameCode` varchar(8) NOT NULL,
-  `turn` text NOT NULL,
+  `turn` set('player1','player2','player3') NOT NULL,
   `player1` text NOT NULL,
   `player2` text NOT NULL,
   `player3` text NOT NULL,
@@ -94,7 +94,22 @@ CREATE TABLE `server` (
 --
 
 INSERT INTO `server` (`ownerExpiry`, `product_name`) VALUES
-(1369004244, 'teen-do-paanch');
+(1369131744, 'teen-do-paanch');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaction`
+--
+
+DROP TABLE IF EXISTS `transaction`;
+CREATE TABLE `transaction` (
+  `gameCode` varchar(8) NOT NULL,
+  `number` int(11) NOT NULL,
+  `attribute` set('spade1','spade7','spade8','spade9','spade10','spade11','spade12','spade13','heart1','heart7','heart8','heart9','heart10','heart11','heart12','heart13','club1','club8','club9','club10','club11','club12','club13','diamond1','diamond8','diamond9','diamond10','diamond11','diamond12','diamond13','trick1','trick2','trick3','trick4','trick5','trick6','trick7','trick8','trick9','trick10') NOT NULL,
+  `from` set('player1','player2','player3','current_trick','trick1','trick2','trick3','trick4','trick5','trick6','trick7','trick8','trick9','trick10') DEFAULT NULL,
+  `to` set('player1','player2','player3','current_trick','trick1','trick2','trick3','trick4','trick5','trick6','trick7','trick8','trick9','trick10') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -119,6 +134,7 @@ UPDATE `server` SET `ownerExpiry`=UNIX_TIMESTAMP();
 UPDATE `game` SET `player1`=`player2`, `player2`=`player3`, `player3`='' WHERE `owner_lastmove` < UNIX_TIMESTAMP()-3600;
 DELETE FROM `game` WHERE `player1`='';
 DELETE FROM `user` WHERE NOT EXISTS (SELECT * FROM `game` WHERE `game`.`gameCode`=`user`.`gameCode`);
+DELETE FROM `transaction` WHERE NOT EXISTS (SELECT * FROM `game` WHERE `game`.`gameCode`=`transaction`.`gameCode`);
 END$$
 
 DELIMITER ;

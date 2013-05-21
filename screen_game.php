@@ -82,23 +82,29 @@
 		<script src="jquery-1.9.1.js"></script>
 		<script src="jquery-ui-1.10.3.js"></script>
 		<script>
-			var time_left = <?php echo $time_left; ?>;
-			function setTime(){
-				document.getElementById('expiry').innerHTML = time_left--;
-			}
-			setInterval(setTime, 1000);
 			$(function(){
+				var time_left = <?php echo $time_left; ?>;
+				function setTime(){
+					document.getElementById('expiry').innerHTML = time_left--;
+					$.getJSON('gameStatus.php', function(data){
+						$("#dynamic-panel-players").html(data["LIST_OF_PLAYERS"]);
+						$("#dynamic-panel-spectators").html(data["LIST_OF_SPECTATORS"]);
+					});
+				}
+				setInterval(setTime, 1000);
 				<?php if($my_player !== 'spectator'){ ?>
 					$("#area-my .card").draggable({
 						revert: "invalid"
 					});
-					$("#container-trick").droppable({
-						drop: function(event, ui){
-							var card = $(ui.draggable).attr('class');
-							$(ui.draggable).remove();
-							$("#area-trick").append("<div class='"+ card +"' id='card1'></div>");
-						}
-					});
+					<?php if($my_player === $res_game[0]['turn']){ ?>
+						$("#container-trick").droppable({
+							drop: function(event, ui){
+								var card = $(ui.draggable).attr('class');
+								$(ui.draggable).remove();
+								$("#area-trick").append("<div class='"+ card +"' id='card1'></div>");
+							}
+						});
+					<?php } ?>
 				<?php } ?>
 			});
 		</script>
@@ -154,11 +160,15 @@
 			<div class="padding">
 				<div class="sub-panel-people">
 					<div class="heading">Players</div>
-					<?php echo $LIST_OF_PLAYERS; ?>
+					<div id="dynamic-panel-players">
+						<?php echo $LIST_OF_PLAYERS; ?>
+					</div>
 				</div>
 				<div class="sub-panel-people">
 					<div class="heading">Spectators</div>
-					<?php echo $LIST_OF_SPECTATORS; ?>
+					<div id="dynamic-panel-spectators">
+						<?php echo $LIST_OF_SPECTATORS; ?>
+					</div>
 				</div>
 			</div>
 		</div>
