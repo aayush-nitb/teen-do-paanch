@@ -84,24 +84,37 @@
 		<script>
 			$(function(){
 				var time_left = <?php echo $time_left; ?>;
+				var query = "";
 				function setTime(){
 					document.getElementById('expiry').innerHTML = time_left--;
-					$.getJSON('gameStatus.php', function(data){
-						$("#dynamic-panel-players").html(data["LIST_OF_PLAYERS"]);
-						$("#dynamic-panel-spectators").html(data["LIST_OF_SPECTATORS"]);
+					$.ajax({
+						url: 'gameStatus.php',
+						data: 'query=' + query,
+						type: 'get',
+						dataType: 'json',
+						async: true,
+						global: false,
+						cache: false,
+						success: function(data){
+							$("#dynamic-panel-players").html(data["LIST_OF_PLAYERS"]);
+							$("#dynamic-panel-spectators").html(data["LIST_OF_SPECTATORS"]);
+						}
 					});
 				}
 				setInterval(setTime, 1000);
 				<?php if($my_player !== 'spectator'){ ?>
 					$("#area-my .card").draggable({
+						addClasses: false,
 						revert: "invalid"
 					});
 					<?php if($my_player === $res_game[0]['turn']){ ?>
 						$("#container-trick").droppable({
+							addClasses: false,
 							drop: function(event, ui){
 								var card = $(ui.draggable).attr('class');
 								$(ui.draggable).remove();
 								$("#area-trick").append("<div class='"+ card +"' id='card1'></div>");
+								query = "through " + card;
 							}
 						});
 					<?php } ?>
