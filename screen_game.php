@@ -71,6 +71,14 @@
 		if($res_game[0][$card] === $left_player) $left_count++;
 		if($res_game[0][$card] === $right_player) $right_count++;
 	}
+	
+	$res_transaction = dbget("SELECT max(`number`) FROM `transaction` WHERE `gameCode`='$gameCode'");
+	if($res_transaction[0][0]){
+		$transaction_number = $res_transaction[0][0];
+	}
+	else{
+		$transaction_number = "0";
+	}
 ?>
 <!--Force IE6 into quirks mode with this comment tag-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -82,24 +90,32 @@
 		<script src="jquery-1.9.1.js"></script>
 		<script src="jquery-ui-1.10.3.js"></script>
 		<script>
-			$(function(){
-				var time_left = <?php echo $time_left; ?>;
-				var refresh_time = 1000;
-				
-				var query = "";
-				setInterval(function(){
-					document.getElementById('expiry').innerHTML = time_left--;
-					$.ajax({
-						url: 'gameStatus.php',
-						data: 'query=' + query,
-						type: 'get',
-						dataType: 'json',
-						success: function(data){
-							$("#dynamic-panel-players").html(data["LIST_OF_PLAYERS"]);
-							$("#dynamic-panel-spectators").html(data["LIST_OF_SPECTATORS"]);
+			var refresh_time = 1000;
+			var time_left = <?php echo $time_left; ?>;
+			var transaction_number = <?php echo $transaction_number; ?>;
+			
+			setInterval(function(){
+				document.getElementById('expiry').innerHTML = time_left--;
+				$.ajax({
+					url: 'gameStatus.php',
+					data: 'transaction_number=' + transaction_number + '&query=' + $("#query").text(),
+					type: 'get',
+					dataType: 'json',
+					success: function(data){
+						$("#dynamic-panel-players").html(data["LIST_OF_PLAYERS"]);
+						$("#dynamic-panel-spectators").html(data["LIST_OF_SPECTATORS"]);
+						if(data["transaction"]){
+							alert("animate card " + data["transaction"]["attribute"] + " from " + data["transaction"]["from"] + " to " + data["transaction"]["to"]);
+							transaction_number++;
 						}
-					});
-				}, refresh_time);
+						$("#query").text("");
+					}
+				}).fail(function(){
+					console.log("failed to get game status");
+				});
+			}, refresh_time);
+			
+			$(function(){
 				<?php if($my_player !== 'spectator'){ ?>
 					$("#area-my .card").draggable({
 						addClasses: false,
@@ -112,7 +128,7 @@
 								var card = $(ui.draggable).attr('class');
 								$(ui.draggable).remove();
 								$("#area-trick").append("<div class='"+ card +"' id='card1'></div>");
-								query = "through " + card;
+								$("#query").text('through ' + card);
 							}
 						});
 					<?php } ?>
@@ -125,6 +141,7 @@
 			<div class="padding">
 				Game Code: <?php echo $gameCode; ?><br>
 				Ownership will be expired in <span id="expiry"></span> seconds
+				<div id="query"></div>
 			</div>
 		</div>
 		<div id="panel-arena">

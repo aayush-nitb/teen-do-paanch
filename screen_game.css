@@ -130,6 +130,9 @@ body{
 	background: url(cards.png) -1440px -480px no-repeat;
 }
 
+#query{
+	display: none;
+}
 #panel-information, #panel-people{
 	position: absolute;
 	top: 0;
