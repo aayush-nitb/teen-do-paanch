@@ -84,24 +84,22 @@
 		<script>
 			$(function(){
 				var time_left = <?php echo $time_left; ?>;
+				var refresh_time = 1000;
+				
 				var query = "";
-				function setTime(){
+				setInterval(function(){
 					document.getElementById('expiry').innerHTML = time_left--;
 					$.ajax({
 						url: 'gameStatus.php',
 						data: 'query=' + query,
 						type: 'get',
 						dataType: 'json',
-						async: true,
-						global: false,
-						cache: false,
 						success: function(data){
 							$("#dynamic-panel-players").html(data["LIST_OF_PLAYERS"]);
 							$("#dynamic-panel-spectators").html(data["LIST_OF_SPECTATORS"]);
 						}
 					});
-				}
-				setInterval(setTime, 1000);
+				}, refresh_time);
 				<?php if($my_player !== 'spectator'){ ?>
 					$("#area-my .card").draggable({
 						addClasses: false,
