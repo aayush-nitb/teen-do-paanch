@@ -101,6 +101,7 @@
 					data: 'transaction_number=' + transaction_number + '&query=' + $("#query").text(),
 					type: 'get',
 					dataType: 'json',
+					cache: false,
 					success: function(data){
 						$("#dynamic-panel-players").html(data["LIST_OF_PLAYERS"]);
 						$("#dynamic-panel-spectators").html(data["LIST_OF_SPECTATORS"]);
