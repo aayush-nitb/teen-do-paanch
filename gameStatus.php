@@ -45,13 +45,32 @@
 		$next_transaction = null;
 	}
 	
-	if($my_player != "spectator"){
+	if($my_player !== "spectator"){
 		if(preg_match('/^through card (\S+) ui-draggable-dragging$/', $query, $match)){
 			$card = $match[1];
 			if($res_game[0][$card] === $my_player){
 				$transaction_number++;
-				if(dbset("INSERT INTO `transaction`(`gameCode`,`number`,`attribute`,`from`,`to`) VALUES('$gameCode',$transaction_number,'$card','$my_player','current_trick')")){
+				if(dbset("INSERT INTO `transaction`(`gameCode`,`number`,`action`,`attribute`,`from`,`to`) VALUES('$gameCode',$transaction_number,'through card','$card','$my_player','current_trick')")){
 					dbset("UPDATE `game` SET `$card`='current_trick' WHERE `gameCode`='$gameCode'");
+				}
+			}
+		}
+		elseif(preg_match('/^select (\S+)$/', $query, $match)){
+			$player_name = $match[1];
+			if($res_game[0]["player2"] === ""){
+				$transaction_number++;
+				if(dbset("INSERT INTO `transaction`(`gameCode`,`number`,`action`,`attribute`,`from`,`to`) VALUES('$gameCode',$transaction_number,'select player','player2','','$player_name')")){
+					if(dbset("UPDATE `game` SET `player2`='$player_name' WHERE `gameCode`='$gameCode'")){
+						dbset("UPDATE `user` SET `role`='player' WHERE `gameCode`='$gameCode' AND `name`='$player_name'");
+					}
+				}
+			}
+			elseif($res_game[0]["player3"] === ""){
+				$transaction_number++;
+				if(dbset("INSERT INTO `transaction`(`gameCode`,`number`,`action`,`attribute`,`from`,`to`) VALUES('$gameCode',$transaction_number,'select player','player3','','$player_name')")){
+					if(dbset("UPDATE `game` SET `player3`='$player_name' WHERE `gameCode`='$gameCode'")){
+						dbset("UPDATE `user` SET `role`='player' WHERE `gameCode`='$gameCode' AND `name`='$player_name'");
+					}
 				}
 			}
 		}
@@ -65,11 +84,22 @@
 		}
 	}
 	
-	$LIST_OF_SPECTATORS = "";
+	$info = "";
+	if($my_player === "player1"){
+		if($res_game[0]["player2"] === ""){
+			$info = "Select second player";
+		}
+		elseif($res_game[0]["player3"] === ""){
+			$info = "Select third player";
+		}
+	}
+	
+	$LIST_OF_SPECTATORS = "<div class='info'>$info</div>\n";
+	$option = ($my_player === "player1")? "option": "";
 	$res_user = dbget("SELECT `name` FROM `user` WHERE `gameCode`='$gameCode' and `role`='spectator'");
 	if($res_user){
 		foreach($res_user as $user){
-			$LIST_OF_SPECTATORS .= "<div>".$user['name']."</div>\n";
+			$LIST_OF_SPECTATORS .= "<div class='user $option'>".$user['name']."</div>\n";
 		}
 	}
 	

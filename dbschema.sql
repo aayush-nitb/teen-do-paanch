@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 21, 2013 at 06:14 PM
+-- Generation Time: May 26, 2013 at 10:39 PM
 -- Server version: 5.5.24-log
 -- PHP Version: 5.4.3
 
@@ -94,7 +94,7 @@ CREATE TABLE `server` (
 --
 
 INSERT INTO `server` (`ownerExpiry`, `product_name`) VALUES
-(1369160064, 'teen-do-paanch');
+(1369607904, 'teen-do-paanch');
 
 -- --------------------------------------------------------
 
@@ -106,9 +106,10 @@ DROP TABLE IF EXISTS `transaction`;
 CREATE TABLE `transaction` (
   `gameCode` varchar(8) NOT NULL,
   `number` int(11) NOT NULL,
-  `attribute` set('spade1','spade7','spade8','spade9','spade10','spade11','spade12','spade13','heart1','heart7','heart8','heart9','heart10','heart11','heart12','heart13','club1','club8','club9','club10','club11','club12','club13','diamond1','diamond8','diamond9','diamond10','diamond11','diamond12','diamond13','trick1','trick2','trick3','trick4','trick5','trick6','trick7','trick8','trick9','trick10') NOT NULL,
-  `from` set('player1','player2','player3','current_trick','trick1','trick2','trick3','trick4','trick5','trick6','trick7','trick8','trick9','trick10') DEFAULT NULL,
-  `to` set('player1','player2','player3','current_trick','trick1','trick2','trick3','trick4','trick5','trick6','trick7','trick8','trick9','trick10') NOT NULL
+  `action` text NOT NULL,
+  `attribute` text NOT NULL,
+  `from` text,
+  `to` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

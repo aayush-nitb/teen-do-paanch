@@ -12,6 +12,29 @@
 	}
 	$time_left = $ownerExpiry - $current_time;
 	
+	$top_player = '';
+	if($res_game[0]['player1'] === $my_name){
+		$my_player = 'player1';
+		$left_player = 'player3';
+		$right_player = 'player2';
+	}
+	elseif($res_game[0]['player2'] === $my_name){
+		$my_player = 'player2';
+		$left_player = 'player1';
+		$right_player = 'player3';
+	}
+	elseif($res_game[0]['player3'] === $my_name){
+		$my_player = 'player3';
+		$left_player = 'player2';
+		$right_player = 'player1';
+	}
+	else{
+		$my_player = 'spectator';
+		$top_player = 'player1';
+		$left_player = 'player3';
+		$right_player = 'player2';
+	}
+	
 	$LIST_OF_PLAYERS = "";
 	$res_user = dbget("SELECT `name` FROM `user` WHERE `gameCode`='$gameCode' and `role`='player'");
 	if($res_user){
@@ -20,35 +43,39 @@
 		}
 	}
 	
-	$LIST_OF_SPECTATORS = "";
-	$res_user = dbget("SELECT `name` FROM `user` WHERE `gameCode`='$gameCode' and `role`='spectator'");
-	if($res_user){
-		foreach($res_user as $user){
-			$LIST_OF_SPECTATORS .= "<div>".$user['name']."</div>\n";
+	$info = "";
+	if($my_player === "player1"){
+		if($res_game[0]["player2"] === ""){
+			$info = "Select second player";
+		}
+		elseif($res_game[0]["player3"] === ""){
+			$info = "Select third player";
 		}
 	}
 	
-	$top_player = '';
-	if($res_game[0]['player1'] === $my_name){
-		$my_player = 'player1';
-		$left_player = 'player2';
-		$right_player = 'player3';
+	$LIST_OF_SPECTATORS = "<div class='info'>$info</div>\n";
+	$option = ($my_player === "player1")? "option": "";
+	$res_user = dbget("SELECT `name` FROM `user` WHERE `gameCode`='$gameCode' and `role`='spectator'");
+	if($res_user){
+		foreach($res_user as $user){
+			$LIST_OF_SPECTATORS .= "<div class='user $option'>".$user['name']."</div>\n";
+		}
 	}
-	elseif($res_game[0]['player2'] === $my_name){
-		$my_player = 'player2';
-		$left_player = 'player3';
-		$right_player = 'player1';
-	}
-	elseif($res_game[0]['player3'] === $my_name){
-		$my_player = 'player3';
-		$left_player = 'player1';
-		$right_player = 'player2';
+	
+	$name_left = $res_game[0][$left_player];
+	if($name_left === ""){
+		$name_left_filler = "<div class='vacant name' id='name-left'>vacant</div>";
 	}
 	else{
-		$my_player = 'spectator';
-		$top_player = 'player1';
-		$left_player = 'player3';
-		$right_player = 'player2';
+		$name_left_filler = "<div class='name' id='name-left'>$name_left</div>";
+	}
+	
+	$name_right = $res_game[0][$right_player];
+	if($name_right === ""){
+		$name_right_filler = "<div class='vacant name' id='name-right'>vacant</div>";
+	}
+	else{
+		$name_right_filler = "<div class='name' id='name-right'>$name_right</div>";
 	}
 	
 	$left_count = 0;
@@ -108,42 +135,50 @@
 					success: function(data){
 						$("#dynamic-panel-players").html(data["LIST_OF_PLAYERS"]);
 						$("#dynamic-panel-spectators").html(data["LIST_OF_SPECTATORS"]);
+						$("#dynamic-panel-spectators .option").click(function(){
+							$("#query").text('select ' + $(this).text());
+						});
 						if(data["transaction"]){
-							if(data["transaction"]["from"] === left_player){
-								var count_cards = $("#area-left .card").length;
-								var random_number = Math.ceil(Math.random()*count_cards);
-								var random_card = $("#area-left .card:nth-child(" + random_number + ")");
-								$(random_card).animate({
-									'left': '300px',
-									'top': '145px'
-								}, 500, function(){
-									$(random_card).remove();
-									$("#area-trick").append("<div class='card " + data["transaction"]["attribute"] + "' id='card2'></div>");
-								});
+							if(data["transaction"]["action"] === "through card"){
+								if(data["transaction"]["from"] === left_player){
+									var count_cards = $("#area-left .card").length;
+									var random_number = Math.ceil(Math.random()*count_cards);
+									var random_card = $("#area-left .card:nth-child(" + random_number + ")");
+									$(random_card).animate({
+										'left': '300px',
+										'top': '145px'
+									}, 500, function(){
+										$(random_card).remove();
+										$("#area-trick").append("<div class='card " + data["transaction"]["attribute"] + "' id='card2'></div>");
+									});
+								}
+								else if(data["transaction"]["from"] === right_player){
+									var count_cards = $("#area-right .card").length;
+									var random_number = Math.ceil(Math.random()*count_cards);
+									var random_card = $("#area-right .card:nth-child(" + random_number + ")");
+									$(random_card).animate({
+										'left': '-257px',
+										'top': '127px'
+									}, 500, function(){
+										$(random_card).remove();
+										$("#area-trick").append("<div class='card " + data["transaction"]["attribute"] + "' id='card3'></div>");
+									});
+								}
+								else if(data["transaction"]["from"] === top_player){
+									var count_cards = $("#area-my .card").length;
+									var random_number = Math.ceil(Math.random()*count_cards);
+									var random_card = $("#area-my .card:nth-child(" + random_number + ")");
+									$(random_card).animate({
+										'left': '165px',
+										'top': '255px'
+									}, 500, function(){
+										$(random_card).remove();
+										$("#area-trick").append("<div class='card " + data["transaction"]["attribute"] + "' id='card1'></div>");
+									});
+								}
 							}
-							else if(data["transaction"]["from"] === right_player){
-								var count_cards = $("#area-right .card").length;
-								var random_number = Math.ceil(Math.random()*count_cards);
-								var random_card = $("#area-right .card:nth-child(" + random_number + ")");
-								$(random_card).animate({
-									'left': '-257px',
-									'top': '127px'
-								}, 500, function(){
-									$(random_card).remove();
-									$("#area-trick").append("<div class='card " + data["transaction"]["attribute"] + "' id='card3'></div>");
-								});
-							}
-							else if(data["transaction"]["from"] === top_player){
-								var count_cards = $("#area-my .card").length;
-								var random_number = Math.ceil(Math.random()*count_cards);
-								var random_card = $("#area-my .card:nth-child(" + random_number + ")");
-								$(random_card).animate({
-									'left': '165px',
-									'top': '255px'
-								}, 500, function(){
-									$(random_card).remove();
-									$("#area-trick").append("<div class='card " + data["transaction"]["attribute"] + "' id='card1'></div>");
-								});
+							else if(data["transaction"]["action"] === "select player"){
+								location = "screen_game.php";
 							}
 							transaction_number++;
 						}
@@ -186,6 +221,7 @@
 		<div id="panel-arena">
 			<div class="center padding">
 				<div id="container-row1">
+					<div class="name" id="name-my"><?php echo ($my_player === "spectator")? $res_game[0][$top_player]: $res_game[0][$my_player]; ?></div>
 					<div id="area-my">
 						<?php
 							if($my_player === 'spectator'){
@@ -203,6 +239,11 @@
 					</div>
 				</div>
 				<div id="container-row2">
+					<?php echo $name_left_filler; ?>
+					<div class="filler"></div>
+					<?php echo $name_right_filler; ?>
+				</div>
+				<div id="container-row3">
 					<div id="area-left">
 						<?php
 							for($i=0; $i<$left_count; $i++){

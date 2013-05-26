@@ -39,6 +39,21 @@ body{
 	position: absolute;
 	background: #ffe;
 }
+.name{
+	font-weight: bold;
+	font-size: 20px;
+	font-family: Georgia;
+	margin-bottom: 10px;
+}
+.vacant{
+	background: red;
+}
+.info{
+	font-style: italic;
+	font-size: 14px;
+	font-family: Georgia;
+	color: green;
+}
 .club1{
 	background: url(cards.png) 0px 0px no-repeat;
 }
@@ -155,12 +170,18 @@ body{
 	left: auto;
 	right: 0;
 }
+#dynamic-panel-spectators .option{
+	cursor: pointer;
+}
+#dynamic-panel-spectators .option:hover{
+	color: green;
+}
 #container-row1{
 	margin: 0px auto;
 	width: 800px;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
-#container-row2{
+#container-row2, #container-row3{
 	margin: 0px auto;
 	width: 800px;
 }
@@ -168,6 +189,15 @@ body{
 	float: left;
 	width: 480px;
 	height: 450px;
+}
+#container-row2 .filler{
+	width: 480px;
+	height: 1px;
+	float: left;
+}
+#name-left, #name-right{
+	width: 160px;
+	float: left;
 }
 #area-my{
 	position: relative;
