@@ -93,6 +93,9 @@
 			var refresh_time = 1000;
 			var time_left = <?php echo $time_left; ?>;
 			var transaction_number = <?php echo $transaction_number; ?>;
+			var left_player = "<?php echo $left_player; ?>";
+			var right_player = "<?php echo $right_player; ?>";
+			var top_player = "<?php echo $top_player; ?>";
 			
 			setInterval(function(){
 				document.getElementById('expiry').innerHTML = time_left--;
@@ -106,7 +109,42 @@
 						$("#dynamic-panel-players").html(data["LIST_OF_PLAYERS"]);
 						$("#dynamic-panel-spectators").html(data["LIST_OF_SPECTATORS"]);
 						if(data["transaction"]){
-							alert("animate card " + data["transaction"]["attribute"] + " from " + data["transaction"]["from"] + " to " + data["transaction"]["to"]);
+							if(data["transaction"]["from"] === left_player){
+								var count_cards = $("#area-left .card").length;
+								var random_number = Math.ceil(Math.random()*count_cards);
+								var random_card = $("#area-left .card:nth-child(" + random_number + ")");
+								$(random_card).animate({
+									'left': '300px',
+									'top': '145px'
+								}, 500, function(){
+									$(random_card).remove();
+									$("#area-trick").append("<div class='card " + data["transaction"]["attribute"] + "' id='card2'></div>");
+								});
+							}
+							else if(data["transaction"]["from"] === right_player){
+								var count_cards = $("#area-right .card").length;
+								var random_number = Math.ceil(Math.random()*count_cards);
+								var random_card = $("#area-right .card:nth-child(" + random_number + ")");
+								$(random_card).animate({
+									'left': '-257px',
+									'top': '127px'
+								}, 500, function(){
+									$(random_card).remove();
+									$("#area-trick").append("<div class='card " + data["transaction"]["attribute"] + "' id='card3'></div>");
+								});
+							}
+							else if(data["transaction"]["from"] === top_player){
+								var count_cards = $("#area-my .card").length;
+								var random_number = Math.ceil(Math.random()*count_cards);
+								var random_card = $("#area-my .card:nth-child(" + random_number + ")");
+								$(random_card).animate({
+									'left': '165px',
+									'top': '255px'
+								}, 500, function(){
+									$(random_card).remove();
+									$("#area-trick").append("<div class='card " + data["transaction"]["attribute"] + "' id='card1'></div>");
+								});
+							}
 							transaction_number++;
 						}
 						$("#query").text("");
