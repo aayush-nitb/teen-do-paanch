@@ -45,32 +45,57 @@
 		$next_transaction = null;
 	}
 	
-	if($my_player !== "spectator"){
-		if(preg_match('/^through card (\S+) ui-draggable-dragging$/', $query, $match)){
-			$card = $match[1];
-			if($res_game[0][$card] === $my_player){
-				$transaction_number++;
-				if(dbset("INSERT INTO `transaction`(`gameCode`,`number`,`action`,`attribute`,`from`,`to`) VALUES('$gameCode',$transaction_number,'through card','$card','$my_player','current_trick')")){
-					dbset("UPDATE `game` SET `$card`='current_trick' WHERE `gameCode`='$gameCode'");
+	if(preg_match('/^through card (\S+) ui-draggable-dragging$/', $query, $match) && $my_player === $res_game[0]['turn']){
+		$card = $match[1];
+		if($res_game[0][$card] === $my_player){
+			$transaction_number++;
+			if(dbset("INSERT INTO `transaction`(`gameCode`,`number`,`action`,`attribute`,`from`,`to`) VALUES('$gameCode',$transaction_number,'through card','$card','$my_player','current_trick')")){
+				if(dbset("UPDATE `game` SET `$card`='current_trick' WHERE `gameCode`='$gameCode'")){
+					$current_trick = array($card);
+					$cards = array();
+					$deck = array("spade","heart","club","diamond");
+					foreach($deck as $d){
+						if($d === "spade") $cards[] = "spade7";
+						if($d === "heart") $cards[] = "heart7";
+						foreach(range(8,13) as $number){
+							$cards[] = $d.$number;
+						}
+						$cards[] = $d."1";
+					}
+					foreach($cards as $card){
+						if($res_game[0][$card] === 'current_trick') $current_trick[] = $card;
+					}
+					if(count($current_trick) == 3){
+						//find next trick number
+						//find trick holder
+						//update game set card=trick, trick=holder, turn=holder
+						//insert transaction
+					}
+					else{
+						if($res_game[0]['turn'] === "player1") $next_turn = "player2";
+						elseif($res_game[0]['turn'] === "player2") $next_turn = "player3";
+						elseif($res_game[0]['turn'] === "player3") $next_turn = "player1";
+						dbset("UPDATE `game` SET `turn`='$next_turn' WHERE `gameCode`='$gameCode'");
+					}
 				}
 			}
 		}
-		elseif(preg_match('/^select (\S+)$/', $query, $match)){
-			$player_name = $match[1];
-			if($res_game[0]["player2"] === ""){
-				$transaction_number++;
-				if(dbset("INSERT INTO `transaction`(`gameCode`,`number`,`action`,`attribute`,`from`,`to`) VALUES('$gameCode',$transaction_number,'select player','player2','','$player_name')")){
-					if(dbset("UPDATE `game` SET `player2`='$player_name' WHERE `gameCode`='$gameCode'")){
-						dbset("UPDATE `user` SET `role`='player' WHERE `gameCode`='$gameCode' AND `name`='$player_name'");
-					}
+	}
+	elseif(preg_match('/^select (\S+)$/', $query, $match) && $my_player === "player1"){
+		$player_name = $match[1];
+		if($res_game[0]["player2"] === ""){
+			$transaction_number++;
+			if(dbset("INSERT INTO `transaction`(`gameCode`,`number`,`action`,`attribute`,`from`,`to`) VALUES('$gameCode',$transaction_number,'select player','player2','','$player_name')")){
+				if(dbset("UPDATE `game` SET `player2`='$player_name' WHERE `gameCode`='$gameCode'")){
+					dbset("UPDATE `user` SET `role`='player' WHERE `gameCode`='$gameCode' AND `name`='$player_name'");
 				}
 			}
-			elseif($res_game[0]["player3"] === ""){
-				$transaction_number++;
-				if(dbset("INSERT INTO `transaction`(`gameCode`,`number`,`action`,`attribute`,`from`,`to`) VALUES('$gameCode',$transaction_number,'select player','player3','','$player_name')")){
-					if(dbset("UPDATE `game` SET `player3`='$player_name' WHERE `gameCode`='$gameCode'")){
-						dbset("UPDATE `user` SET `role`='player' WHERE `gameCode`='$gameCode' AND `name`='$player_name'");
-					}
+		}
+		elseif($res_game[0]["player3"] === ""){
+			$transaction_number++;
+			if(dbset("INSERT INTO `transaction`(`gameCode`,`number`,`action`,`attribute`,`from`,`to`) VALUES('$gameCode',$transaction_number,'select player','player3','','$player_name')")){
+				if(dbset("UPDATE `game` SET `player3`='$player_name' WHERE `gameCode`='$gameCode'")){
+					dbset("UPDATE `user` SET `role`='player' WHERE `gameCode`='$gameCode' AND `name`='$player_name'");
 				}
 			}
 		}

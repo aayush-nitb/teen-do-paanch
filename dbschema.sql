@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 26, 2013 at 10:39 PM
+-- Generation Time: May 31, 2013 at 07:37 PM
 -- Server version: 5.5.24-log
 -- PHP Version: 5.4.3
 
@@ -94,7 +94,7 @@ CREATE TABLE `server` (
 --
 
 INSERT INTO `server` (`ownerExpiry`, `product_name`) VALUES
-(1369607904, 'teen-do-paanch');
+(1370029044, 'teen-do-paanch');
 
 -- --------------------------------------------------------
 

@@ -106,6 +106,19 @@
 	else{
 		$transaction_number = "0";
 	}
+	
+	$current_trick = "";
+	$res_transaction = dbget("SELECT `attribute`,`from` FROM `transaction` WHERE `gameCode`='$gameCode' AND `action`='through card' AND `to`='current_trick' ORDER BY `number`");
+	if($res_transaction){
+		foreach($res_transaction as $transaction){
+			$card = $transaction['attribute'];
+			if($transaction['from'] === $my_player) $id = "card1";
+			elseif($transaction['from'] === $top_player) $id = "card1";
+			elseif($transaction['from'] === $left_player) $id = "card2";
+			elseif($transaction['from'] === $right_player) $id = "card3";
+			$current_trick .= "\n<div class='card $card' id='$id'></div>";
+		}
+	}
 ?>
 <!--Force IE6 into quirks mode with this comment tag-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -120,6 +133,7 @@
 			var refresh_time = 1000;
 			var time_left = <?php echo $time_left; ?>;
 			var transaction_number = <?php echo $transaction_number; ?>;
+			var my_player = "<?php echo $my_player; ?>";
 			var left_player = "<?php echo $left_player; ?>";
 			var right_player = "<?php echo $right_player; ?>";
 			var top_player = "<?php echo $top_player; ?>";
@@ -151,6 +165,7 @@
 										$(random_card).remove();
 										$("#area-trick").append("<div class='card " + data["transaction"]["attribute"] + "' id='card2'></div>");
 									});
+									$("#container-trick").droppable("enable");
 								}
 								else if(data["transaction"]["from"] === right_player){
 									var count_cards = $("#area-right .card").length;
@@ -176,6 +191,9 @@
 										$("#area-trick").append("<div class='card " + data["transaction"]["attribute"] + "' id='card1'></div>");
 									});
 								}
+								else if(data["transaction"]["from"] === my_player){
+									$("#container-trick").droppable("disable");
+								}
 							}
 							else if(data["transaction"]["action"] === "select player"){
 								location = "screen_game.php";
@@ -195,17 +213,16 @@
 						addClasses: false,
 						revert: "invalid"
 					});
-					<?php if($my_player === $res_game[0]['turn']){ ?>
-						$("#container-trick").droppable({
-							addClasses: false,
-							drop: function(event, ui){
-								var card = $(ui.draggable).attr('class');
-								$(ui.draggable).remove();
-								$("#area-trick").append("<div class='"+ card +"' id='card1'></div>");
-								$("#query").text('through ' + card);
-							}
-						});
-					<?php } ?>
+					$("#container-trick").droppable({
+						<?php if($my_player !== $res_game[0]['turn']) echo "disabled:true,"; ?>
+						addClasses: false,
+						drop: function(event, ui){
+							var card = $(ui.draggable).attr('class');
+							$(ui.draggable).remove();
+							$("#area-trick").append("<div class='"+ card +"' id='card1'></div>");
+							$("#query").text('through ' + card);
+						}
+					});
 				<?php } ?>
 			});
 		</script>
@@ -252,7 +269,8 @@
 						?>
 					</div>
 					<div id="container-trick">
-						<div id="area-trick"></div>
+						<div id="area-trick"><?php echo $current_trick; ?>
+						</div>
 					</div>
 					<div id="area-right">
 						<?php
