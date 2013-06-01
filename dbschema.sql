@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 31, 2013 at 07:37 PM
+-- Generation Time: Jun 01, 2013 at 12:32 PM
 -- Server version: 5.5.24-log
 -- PHP Version: 5.4.3
 
@@ -94,7 +94,7 @@ CREATE TABLE `server` (
 --
 
 INSERT INTO `server` (`ownerExpiry`, `product_name`) VALUES
-(1370029044, 'teen-do-paanch');
+(1370089884, 'teen-do-paanch');
 
 -- --------------------------------------------------------
 
@@ -109,7 +109,8 @@ CREATE TABLE `transaction` (
   `action` text NOT NULL,
   `attribute` text NOT NULL,
   `from` text,
-  `to` text NOT NULL
+  `to` text NOT NULL,
+  `next_turn` set('player1','player2','player3') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

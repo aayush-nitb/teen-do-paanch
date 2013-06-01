@@ -82,6 +82,7 @@
 	$right_count = 0;
 	$top_count = 0;
 	$my_card = array();
+	$trick = array();
 	$cards = array();
 	$deck = array("spade","heart","club","diamond");
 	foreach($deck as $d){
@@ -93,6 +94,7 @@
 		$cards[] = $d."1";
 	}
 	foreach($cards as $card){
+		if($res_game[0][$card] === "current_trick") $trick[] = $card;
 		if($res_game[0][$card] === $my_player) $my_card[] = $card;
 		if($res_game[0][$card] === $top_player) $top_count++;
 		if($res_game[0][$card] === $left_player) $left_count++;
@@ -108,7 +110,10 @@
 	}
 	
 	$current_trick = "";
-	$res_transaction = dbget("SELECT `attribute`,`from` FROM `transaction` WHERE `gameCode`='$gameCode' AND `action`='through card' AND `to`='current_trick' ORDER BY `number`");
+	$trick_card1 = isset($trick[0])? $trick[0]: "";
+	$trick_card2 = isset($trick[1])? $trick[1]: "";
+	$trick_card3 = isset($trick[2])? $trick[2]: "";
+	$res_transaction = dbget("SELECT `attribute`,`from` FROM `transaction` WHERE `gameCode`='$gameCode' AND `action`='through card' AND `to`='current_trick' AND (`attribute`='$trick_card1' OR `attribute`='$trick_card2' OR `attribute`='$trick_card3') ORDER BY `number`");
 	if($res_transaction){
 		foreach($res_transaction as $transaction){
 			$card = $transaction['attribute'];
@@ -164,8 +169,8 @@
 									}, 500, function(){
 										$(random_card).remove();
 										$("#area-trick").append("<div class='card " + data["transaction"]["attribute"] + "' id='card2'></div>");
+										if(data["transaction"]["next_turn"] === my_player) $("#container-trick").droppable("enable");
 									});
-									$("#container-trick").droppable("enable");
 								}
 								else if(data["transaction"]["from"] === right_player){
 									var count_cards = $("#area-right .card").length;
@@ -198,7 +203,54 @@
 							else if(data["transaction"]["action"] === "select player"){
 								location = "screen_game.php";
 							}
-							transaction_number++;
+							else if(data["transaction"]["action"] === "move current_trick"){
+								if(data["transaction"]["to"] === left_player){
+									$("#area-trick").animate({
+										'left': '-150px',
+										'opacity': '0'
+									}, 1000, function(){
+										$(this).html('');
+										$(this).css('left', '0px');
+										$(this).css('top', '0px');
+										$(this).css('opacity', '1');
+									});
+								}
+								else if(data["transaction"]["to"] === right_player){
+									$("#area-trick").animate({
+										'left': '150px',
+										'opacity': '0'
+									}, 1000, function(){
+										$(this).html('');
+										$(this).css('left', '0px');
+										$(this).css('top', '0px');
+										$(this).css('opacity', '1');
+									});
+								}
+								else if(data["transaction"]["to"] === top_player){
+									$("#area-trick").animate({
+										'top': '-150px',
+										'opacity': '0'
+									}, 1000, function(){
+										$(this).html('');
+										$(this).css('left', '0px');
+										$(this).css('top', '0px');
+										$(this).css('opacity', '1');
+									});
+								}
+								else if(data["transaction"]["to"] === my_player){
+									$("#area-trick").animate({
+										'top': '-150px',
+										'opacity': '0'
+									}, 1000, function(){
+										$(this).html('');
+										$(this).css('left', '0px');
+										$(this).css('top', '0px');
+										$(this).css('opacity', '1');
+										$("#container-trick").droppable("enable");
+									});
+								}
+							}
+							transaction_number = data["transaction"]["number"];
 						}
 						$("#query").text("");
 					}
